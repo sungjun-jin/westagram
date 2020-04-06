@@ -52,11 +52,11 @@ class SignInView(View) :
                     # 비밀번호 일치
                     return HttpResponse(status=200)
                 else :
-                    # 비밀번호 불일치
+                    # 비밀번호 불일치, 401(권한 없음) return
                     return JsonResponse({"message" : "INVALID_USER"}, status = 401)      
                 
             else :
-                # 아이디 없음 -> 401 return
+                # 아이디 없음 -> 401(권한 없음) return
                 return JsonResponse({"message" : "NO_MATCHING_EMAIL"}, status = 401)
         except KeyError : 
             # key값 누락
@@ -73,15 +73,16 @@ class CommentView(View) :
             if User.objects.filter(email = user_email) : 
 
                 Comment (
-
-                    user_email = User.objects.get(email = user_email),
+                    
+                    # 일치하는 email의 User 객체를 넘겨준다    
+                    user_email = User.objects.get(email = user_email), 
                     comment = data['comment']
 
                 ).save()
 
                 return JsonResponse({"message" : "SUCCESS"}, status = 200)
             else :
-                # 아이디 없음 -> 401 return
+                # 아이디 없음 -> 401(권한 없음) return
                 return JsonResponse({"message" : "NO_MATCHING_EMAIL"}, status = 401)
 
         except KeyError : 
