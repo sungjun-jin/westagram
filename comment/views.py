@@ -5,8 +5,10 @@ from django.http  import HttpResponse,JsonResponse
 
 from .models      import Comment
 from user.models  import User
+from user.utils  import login_required
 
 class CommentView(View):
+	@login_required
 	def post(self,request) :
 		data = json.loads(request.body)
 		try:
